@@ -11,8 +11,8 @@ WHERE V.parish = P.code AND P.municipality = M.code AND M.district = D.code AND 
     FROM votings V1
     WHERE V1.parish = P.code
 )
-GROUP BY M.code, M.name, V.party
-HAVING COUNT(DISTINCT P.code) = (
+GROUP BY M.code, V.party
+HAVING COUNT(P.code) = (
     SELECT COUNT(P2.code)
     FROM parishes P2
     WHERE P2.municipality = M.code
