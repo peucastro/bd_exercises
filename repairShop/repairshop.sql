@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS Brand;
 DROP TABLE IF EXISTS Client;
 DROP TABLE IF EXISTS PostalCode;
 DROP TABLE IF EXISTS Employee;
-DROP TABLE IF EXISTS Speciality;
+DROP TABLE IF EXISTS Specialty;
 
 CREATE TABLE
     Brand (
@@ -22,7 +22,7 @@ CREATE TABLE
     Model (
         modelId INTEGER CONSTRAINT model_PK PRIMARY KEY,
         name TEXT CONSTRAINT model_name_not_null NOT NULL,
-        brandId INTEGER,
+        brandId INTEGER CONSTRAINT model_brand_not_null NOT NULL,
         CONSTRAINT model_brand_FK FOREIGN KEY (brandId) REFERENCES Brand (brandId) ON DELETE CASCADE ON UPDATE CASCADE
     );
 
@@ -37,7 +37,7 @@ CREATE TABLE
         clientId INTEGER CONSTRAINT client_PK PRIMARY KEY,
         name TEXT CONSTRAINT client_name_not_null NOT NULL,
         address TEXT,
-        postalCode TEXT,
+        postalCode TEXT CONSTRAINT client_postalCode_not_null NOT NULL,
         phoneNumber TEXT CONSTRAINT client_phoneNumber_not_null NOT NULL,
         CONSTRAINT client_postalCode_FK FOREIGN KEY (postalCode) REFERENCES PostalCode (postalCode) ON DELETE CASCADE ON UPDATE CASCADE
     );
@@ -46,8 +46,8 @@ CREATE TABLE
     Car (
         carId INTEGER CONSTRAINT car_PK PRIMARY KEY,
         licensePlate TEXT CONSTRAINT car_licensePlate_not_null NOT NULL,
-        modelId INTEGER,
-        clientId INTEGER,
+        modelId INTEGER CONSTRAINT car_model_not_null NOT NULL,
+        clientId INTEGER CONSTRAINT car_client_not_null NOT NULL,
         CONSTRAINT car_model_FK FOREIGN KEY (modelId) REFERENCES Model (modelId) ON DELETE CASCADE ON UPDATE CASCADE,
         CONSTRAINT car_client_FK FOREIGN KEY (clientId) REFERENCES Client (clientId) ON DELETE CASCADE ON UPDATE CASCADE
     );
@@ -57,8 +57,8 @@ CREATE TABLE
         repairId INTEGER CONSTRAINT repair_PK PRIMARY KEY,
         startDate DATE,
         endDate DATE,
-        clientId INTEGER,
-        carId INTEGER,
+        clientId INTEGER CONSTRAINT repair_client_not_null NOT NULL,
+        carId INTEGER CONSTRAINT repair_car_not_null NOT NULL,
         CONSTRAINT repair_client_FK FOREIGN KEY (clientId) REFERENCES Client (clientId) ON DELETE CASCADE ON UPDATE CASCADE,
         CONSTRAINT repair_car_FK FOREIGN KEY (carId) REFERENCES Car (carId) ON DELETE CASCADE ON UPDATE CASCADE
     );
@@ -74,8 +74,8 @@ CREATE TABLE
 
 CREATE TABLE
     RepairPart (
-        repairId INTEGER,
-        partId INTEGER,
+        repairId INTEGER CONSTRAINT repairPart_repair_not_null NOT NULL,
+        partId INTEGER CONSTRAINT repairPart_part_not_null NOT NULL,
         quantity INTEGER CONSTRAINT repairPart_quantity_not_null NOT NULL,
         CONSTRAINT repairPart_PK PRIMARY KEY (repairId, partId),
         CONSTRAINT repairPart_repair_FK FOREIGN KEY (repairId) REFERENCES Repair (repairId) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -84,9 +84,9 @@ CREATE TABLE
 
 CREATE TABLE
     Specialty (
-        specialityId INTEGER CONSTRAINT speciality_PK PRIMARY KEY,
-        name TEXT CONSTRAINT speciality_name_not_null NOT NULL,
-        hourlyRate INTEGER CONSTRAINT speciality_hourlyRate_not_null NOT NULL
+        specialtyId INTEGER CONSTRAINT specialty_PK PRIMARY KEY,
+        name TEXT CONSTRAINT specialty_name_not_null NOT NULL,
+        hourlyRate INTEGER CONSTRAINT specialty_hourlyRate_not_null NOT NULL
     );
 
 CREATE TABLE
@@ -94,17 +94,17 @@ CREATE TABLE
         employeeId INTEGER CONSTRAINT employee_PK PRIMARY KEY,
         name TEXT CONSTRAINT employee_name_not_null NOT NULL,
         address TEXT,
-        postalCode TEXT,
+        postalCode TEXT CONSTRAINT employee_postalCode_not_null NOT NULL,
         phoneNumber TEXT,
-        specialityId INTEGER,
+        specialtyId INTEGER CONSTRAINT employee_specialty_not_null NOT NULL,
         CONSTRAINT employee_postalCode_FK FOREIGN KEY (postalCode) REFERENCES PostalCode (postalCode) ON DELETE CASCADE ON UPDATE CASCADE,
-        CONSTRAINT employee_speciality_FK FOREIGN KEY (specialityId) REFERENCES Speciality (specialityId) ON DELETE CASCADE ON UPDATE CASCADE
+        CONSTRAINT employee_specialty_FK FOREIGN KEY (specialtyId) REFERENCES specialty (specialtyId) ON DELETE CASCADE ON UPDATE CASCADE
     );
 
 CREATE TABLE
     WorkerRepair (
-        employeeId INTEGER,
-        repairId INTEGER,
+        employeeId INTEGER CONSTRAINT workerRepair_employee_not_null NOT NULL,
+        repairId INTEGER CONSTRAINT workerRepair_repair_not_null NOT NULL,
         numHours INTEGER CONSTRAINT workerRepair_numHours_not_null NOT NULL,
         CONSTRAINT workerRepair_PK PRIMARY KEY (employeeId, repairId),
         CONSTRAINT workerRepair_employee_FK FOREIGN KEY (employeeId) REFERENCES Employee (employeeId) ON DELETE CASCADE ON UPDATE CASCADE,

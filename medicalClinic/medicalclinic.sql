@@ -3,16 +3,16 @@ PRAGMA FOREIGN_KEYS = ON;
 DROP TABLE IF EXISTS MedicationPrescription;
 DROP TABLE IF EXISTS Medication;
 DROP TABLE IF EXISTS Consultation;
-DROP TABLE IF EXISTS Speciality;
+DROP TABLE IF EXISTS specialty;
 DROP TABLE IF EXISTS Prescription;
 DROP TABLE IF EXISTS Schedule;
 DROP TABLE IF EXISTS Doctor;
 DROP TABLE IF EXISTS Patient;
 
 CREATE TABLE
-    Speciality (
-        specialityId INTEGER CONSTRAINT speciality_PK PRIMARY KEY,
-        name TEXT CONSTRAINT speciality_name_not_null NOT NULL
+    Specialty (
+        specialtyId INTEGER CONSTRAINT specialty_PK PRIMARY KEY,
+        name TEXT CONSTRAINT specialty_name_not_null NOT NULL
     );
 
 CREATE TABLE
@@ -22,10 +22,10 @@ CREATE TABLE
         tin TEXT,
         address TEXT,
         zipCode TEXT,
-        phoneNumber TEXT CONSTRAINT doctor_phoneNUmber_not_null NOT NULL,
+        phoneNumber TEXT CONSTRAINT doctor_phoneNumber_not_null NOT NULL,
         birthDate DATE CONSTRAINT doctor_birthdate_not_null NOT NULL,
-        specialityId INTEGER,
-        CONSTRAINT doctor_speciality_FK FOREIGN KEY (specialityId) REFERENCES Speciality (specialityId) ON DELETE CASCADE ON UPDATE CASCADE
+        specialtyId INTEGER CONSTRAINT doctor_specialty_not_null NOT NULL,
+        CONSTRAINT doctor_specialty_FK FOREIGN KEY (specialtyId) REFERENCES specialty (specialtyId) ON DELETE CASCADE ON UPDATE CASCADE
     );
 
 CREATE TABLE
@@ -50,8 +50,8 @@ CREATE TABLE
 CREATE TABLE
     Consultation (
         consultationId INTEGER CONSTRAINT consultation_PK PRIMARY KEY,
-        doctorId INTEGER,
-        patientId INTEGER,
+        doctorId INTEGER CONSTRAINT consultation_doctor_not_null NOT NULL,
+        patientId INTEGER consultation_patient_not_null NOT NULL,
         CONSTRAINT consultation_doctor_FK FOREIGN KEY (doctorId) REFERENCES Doctor (doctorId) ON DELETE CASCADE ON UPDATE CASCADE,
         CONSTRAINT consultation_patient_FK FOREIGN KEY (patientId) REFERENCES Patient (patientId) ON DELETE CASCADE ON UPDATE CASCADE
     );
@@ -62,10 +62,10 @@ CREATE TABLE
         name TEXT CONSTRAINT medication_name_not_null NOT NULL,
         lab TEXT,
         administrationMode TEXT,
-        doctorId INTEGER,
-        patientId INTEGER,
-        CONSTRAINT prescription_doctor_FK FOREIGN KEY (doctorId) REFERENCES Doctor (doctorId) ON DELETE CASCADE ON UPDATE CASCADE,
-        CONSTRAINT prescription_patient_FK FOREIGN KEY (patientId) REFERENCES Patient (patientId) ON DELETE CASCADE ON UPDATE CASCADE
+        doctorId INTEGER CONSTRAINT medication_doctor_not_null NOT NULL,
+        patientId INTEGER CONSTRAINT medication_patient_not_null NOT NULL,
+        CONSTRAINT medication_doctor_FK FOREIGN KEY (doctorId) REFERENCES Doctor (doctorId) ON DELETE CASCADE ON UPDATE CASCADE,
+        CONSTRAINT medication_patient_FK FOREIGN KEY (patientId) REFERENCES Patient (patientId) ON DELETE CASCADE ON UPDATE CASCADE
     );
 
 CREATE TABLE
@@ -73,16 +73,16 @@ CREATE TABLE
         prescriptionId INTEGER CONSTRAINT prescription_PK PRIMARY KEY,
         medicationId INTEGER,
         date DATE CONSTRAINT prescription_date_not_null NOT NULL,
-        doctorId INTEGER,
-        patientId INTEGER,
+        doctorId INTEGER CONSTRAINT prescription_doctor_not_null NOT NULL,
+        patientId INTEGER CONSTRAINT prescription_patient_not_null NOT NULL,
         CONSTRAINT prescription_doctor_FK FOREIGN KEY (doctorId) REFERENCES Doctor (doctorId) ON DELETE CASCADE ON UPDATE CASCADE,
         CONSTRAINT prescription_patient_FK FOREIGN KEY (patientId) REFERENCES Patient (patientId) ON DELETE CASCADE ON UPDATE CASCADE
     );
 
 CREATE TABLE
     MedicationPrescription (
-        prescriptionId INTEGER,
-        medicationId INTEGER,
+        prescriptionId INTEGER CONSTRAINT medicationPrescription_prescription_not_null NOT NULL,
+        medicationId INTEGER medicationPrescription_medication_not_null NOT NULL,
         numPackages INTEGER CONSTRAINT medicationPrescription_numPackages_not_null NOT NULL,
         CONSTRAINT medicationPrescription_PK PRIMARY KEY (prescriptionId, medicationId),
         CONSTRAINT medicationPrescription_prescription_FK FOREIGN KEY (prescriptionId) REFERENCES Prescription (prescriptionId),

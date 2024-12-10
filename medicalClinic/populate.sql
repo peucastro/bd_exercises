@@ -1,5 +1,5 @@
--- Populate Speciality table
-INSERT INTO Speciality (specialityId, name) VALUES
+-- Populate Specialty table
+INSERT INTO Specialty (specialtyId, name) VALUES
 (1, 'Cardiology'),
 (2, 'Dermatology'),
 (3, 'Pediatrics'),
@@ -22,7 +22,7 @@ INSERT INTO Speciality (specialityId, name) VALUES
 (20, 'Surgery');
 
 -- Populate Doctor table
-INSERT INTO Doctor (doctorId, name, tin, address, zipCode, phoneNumber, birthDate, specialityId) VALUES
+INSERT INTO Doctor (doctorId, name, tin, address, zipCode, phoneNumber, birthDate, specialtyId) VALUES
 (1, 'John Smith', '123456789', '123 Main St', '12345', '555-0101', '1970-01-15', 1),
 (2, 'Sarah Johnson', '234567890', '456 Oak Ave', '23456', '555-0102', '1975-03-20', 2),
 (3, 'Michael Brown', '345678901', '789 Pine Rd', '34567', '555-0103', '1980-06-10', 3),
