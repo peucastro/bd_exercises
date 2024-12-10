@@ -2,30 +2,24 @@
 
 -- List the code and name of the district and the acronym of the party. Order ascendantly by code.
 
-DROP VIEW IF EXISTS Win_Municipalities;
-
-CREATE VIEW Win_Municipalities AS
-SELECT M.district AS district, M.code AS municipality, V.party AS party, SUM(V.votes) AS total_votes
-FROM votings V, parishes P, municipalities M
-WHERE V.parish = P.code AND P.municipality = M.code
-GROUP BY M.district, M.code, V.party
-HAVING SUM(V.votes) = (
-    SELECT MAX(SUM_VOTES)
-    FROM (
-        SELECT V1.party, SUM(V1.votes) AS SUM_VOTES
-        FROM votings V1, parishes P1
-        WHERE V1.parish = P1.code AND P1.municipality = M.code
-        GROUP BY V1.party
+WITH WIN_MUNICIPALITIES AS (
+    SELECT P.MUNICIPALITY, V.PARTY AS PARTY, SUM(VOTES) VOTES
+    FROM VOTINGS V JOIN PARISHES P ON V.PARISH=P.CODE
+    GROUP BY P.MUNICIPALITY, V.PARTY
+    HAVING (P.MUNICIPALITY, SUM(VOTES)) IN (
+        SELECT X.MUNICIPALITY, MAX(X.TOTAL)
+        FROM (SELECT Y.MUNICIPALITY, Z.PARTY, SUM(Z.VOTES) TOTAL
+            FROM VOTINGS Z JOIN PARISHES Y ON Z.PARISH=Y.CODE
+            GROUP BY Y.MUNICIPALITY, Z.PARTY) X
+        GROUP BY X.MUNICIPALITY
     )
-);
-
-SELECT D.code, D.name, W.party AS PARTY
-FROM Win_Municipalities W, districts D
-WHERE W.district = D.code
-GROUP BY D.code, W.party
+)
+SELECT D.code, D.name, W.PARTY
+FROM WIN_MUNICIPALITIES W JOIN municipalities M ON W.MUNICIPALITY = M.code JOIN districts D ON D.code = M.district
+GROUP BY D.code, W.PARTY
 HAVING COUNT(W.PARTY) = (
     SELECT COUNT(*)
     FROM municipalities M
     WHERE M.district = D.code
 )
-ORDER BY D.code, W.party;
+ORDER BY D.code, W.PARTY;
