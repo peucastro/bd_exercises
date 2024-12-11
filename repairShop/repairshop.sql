@@ -1,6 +1,7 @@
 PRAGMA FOREIGN_KEYS = ON;
 
 DROP TABLE IF EXISTS Car;
+DROP TABLE IF EXISTS PartModel;
 DROP TABLE IF EXISTS RepairPart;
 DROP TABLE IF EXISTS WorkerRepair;
 DROP TABLE IF EXISTS Repair;
@@ -80,6 +81,15 @@ CREATE TABLE
         CONSTRAINT repairPart_PK PRIMARY KEY (repairId, partId),
         CONSTRAINT repairPart_repair_FK FOREIGN KEY (repairId) REFERENCES Repair (repairId) ON DELETE CASCADE ON UPDATE CASCADE,
         CONSTRAINT repairPart_part_FK FOREIGN KEY (partId) REFERENCES Part (partId) ON DELETE CASCADE ON UPDATE CASCADE
+    );
+
+CREATE TABLE
+    PartModel (
+        partId INTEGER,
+        modelId INTEGER,
+        CONSTRAINT PartModel_PK PRIMARY KEY (partId, modelId),
+        CONSTRAINT partModel_part_FK FOREIGN KEY (partId) REFERENCES Part (partId),
+        CONSTRAINT partModel_model_FK FOREIGN KEY (modelId) REFERENCES Model (modelId)
     );
 
 CREATE TABLE

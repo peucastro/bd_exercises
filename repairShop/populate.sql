@@ -67,6 +67,33 @@ INSERT INTO RepairPart (repairId, partId, quantity) VALUES
 (3, 4, 4), -- Spark Plug for Repair 3
 (4, 5, 1); -- Battery for Repair 4
 
+-- Populate PartModel table
+INSERT INTO PartModel (partId, modelId) VALUES
+-- Oil Filter compatibility
+(1, 1), -- Toyota Corolla
+(1, 2), -- Toyota Camry
+(1, 4), -- Honda Civic
+(1, 5), -- Honda Accord
+-- Brake Pads compatibility
+(2, 1), -- Toyota Corolla
+(2, 3), -- Ford F-150
+(2, 6), -- Chevrolet Silverado
+(2, 7), -- BMW 3 Series
+-- Air Filter compatibility
+(3, 1), -- Toyota Corolla
+(3, 2), -- Toyota Camry
+(3, 4), -- Honda Civic
+(3, 7), -- BMW 3 Series
+-- Spark Plug compatibility
+(4, 1), -- Toyota Corolla
+(4, 2), -- Toyota Camry
+(4, 4), -- Honda Civic
+(4, 5), -- Honda Accord
+-- Battery compatibility
+(5, 3), -- Ford F-150
+(5, 6), -- Chevrolet Silverado
+(5, 7); -- BMW 3 Series
+
 -- Populate Specialty table
 INSERT INTO Specialty (specialtyId, name, hourlyRate) VALUES
 (1, 'Mechanic', 50),
