@@ -44,9 +44,12 @@ INSERT INTO Car (carId, licensePlate, modelId, clientId) VALUES
 INSERT INTO Repair (repairId, startDate, endDate, clientId, carId) VALUES
 (1, '2024-01-01', '2024-01-05', 1, 1),
 (2, '2024-01-06', '2024-01-10', 2, 2),
-(3, '2024-01-11', '2024-01-15', 3, 3),
-(4, '2024-01-16', '2024-01-20', 4, 4),
-(5, '2024-01-21', '2024-01-25', 5, 5);
+(3, '2024-01-11', '2024-01-15', 3, 3);
+
+-- Populate Repair table without clientId
+INSERT INTO Repair (repairId, startDate, endDate, carId) VALUES
+(4, '2024-01-16', '2024-01-20', 4),
+(5, '2024-01-21', '2024-01-25', 5);
 
 -- Populate Part table
 INSERT INTO Part (partId, code, designation, unitCost, availableQuantity) VALUES

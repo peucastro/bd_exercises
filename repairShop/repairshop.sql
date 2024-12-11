@@ -57,7 +57,7 @@ CREATE TABLE
         repairId INTEGER CONSTRAINT repair_PK PRIMARY KEY,
         startDate DATE,
         endDate DATE,
-        clientId INTEGER CONSTRAINT repair_client_not_null NOT NULL,
+        clientId INTEGER,
         carId INTEGER CONSTRAINT repair_car_not_null NOT NULL,
         CONSTRAINT repair_client_FK FOREIGN KEY (clientId) REFERENCES Client (clientId) ON DELETE CASCADE ON UPDATE CASCADE,
         CONSTRAINT repair_car_FK FOREIGN KEY (carId) REFERENCES Car (carId) ON DELETE CASCADE ON UPDATE CASCADE
