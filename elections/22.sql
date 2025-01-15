@@ -2,9 +2,8 @@
 
 -- List the acronym and the total of votes as TOTAL, ordered decreasingly on the number of votes.
 
-SELECT PTS.acronym AS PARTY, SUM(V.votes) AS TOTAL
-FROM votings V, parishes PSH, municipalities M, parties PTS
-WHERE V.parish = PSH.code AND V.party = PTS.acronym AND PSH.municipality = M.code
-GROUP BY PTS.acronym
-ORDER BY SUM(V.votes) DESC
+SELECT V.party AS PARTY, SUM(V.votes) AS TOTAL
+FROM votings V
+GROUP BY V.party
+ORDER BY TOTAL DESC
 LIMIT 5
