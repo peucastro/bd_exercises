@@ -2,11 +2,10 @@
 
 -- Order ascendantly on the code of the district and the acronym of the party.
 
-SELECT D.code, D.name, PTS.acronym AS PARTY, SUM(V.votes) AS VOTES
+SELECT D.code, D.name, V.party, SUM(V.votes) AS VOTES
 FROM votings V
-JOIN parishes PSH ON PSH.code = V.parish
-JOIN municipalities M ON M.code = PSH.municipality
-JOIN districts D ON D.code = M.district
-JOIN parties PTS ON PTS.acronym = V.party
-GROUP BY D.code, PTS.acronym
-ORDER BY D.code, PTS.acronym
+JOIN parishes P on P.code = V.parish
+JOIN municipalities M on M.code = P.municipality
+JOIN districts D on D.code = M.district
+GROUP BY D.code, V.party
+ORDER BY D.code ASC, V.party ASC;
