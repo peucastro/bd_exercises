@@ -3,7 +3,7 @@
 SELECT ROUND(AVG(parishes_count), 2) AS AVERAGE
 FROM (
     SELECT COUNT(*) as parishes_count
-    FROM parishes P, municipalities M
-    WHERE P.municipality = M.code
+    FROM parishes P
+    JOIN municipalities M ON M.code = P.municipality
     GROUP BY M.code
 )
