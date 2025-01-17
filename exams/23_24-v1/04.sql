@@ -1,4 +1,4 @@
--- For the third municipality with the most votes, list the acronym and the number of votes (as VOTES of the least voted party on that municipality.
+-- For the third municipality with the most votes, list the acronym and the number of votes (as VOTES) of the least voted party on that municipality.
 
 DROP VIEW IF EXISTS MUN_VOTES;
 DROP VIEW IF EXISTS THIRD;
